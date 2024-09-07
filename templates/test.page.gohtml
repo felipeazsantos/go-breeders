@@ -17,7 +17,7 @@
                 </a>
             </div>
             <div class="mt-2" style="outline: 1px solid silver; padding: 2em;">
-                <pre id ="dog-factory-output">
+                <pre id="dog-factory-output">
                     <span class="text-muted">NMothing received yet...</span>
                 </pre>
             </div>
@@ -33,9 +33,9 @@
     const catFactoryButton = document.getElementById("cat-factory-btn");
     const dogFactoryOutput = document.getElementById("dog-factory-output");
 
-    document.addEventListener("DOMContentLoaded", function() {
-        docFactoryButton.addEventListener("click", function() {
-            fetch("/api/dog-from-factory", {method: 'get'})
+    document.addEventListener("DOMContentLoaded", function () {
+        docFactoryButton.addEventListener("click", function () {
+            fetch("/api/dog-from-factory", { method: 'get' })
                 .then(res => res.json())
                 .then(data => {
                     if (data.error) {
@@ -46,8 +46,8 @@
                 })
         });
 
-        catFactoryButton.addEventListener("click", function() {
-            fetch("/api/cat-from-factory", {method: 'get'})
+        catFactoryButton.addEventListener("click", function () {
+            fetch("/api/cat-from-factory", { method: 'get' })
                 .then(res => res.json())
                 .then(data => {
                     if (data.error) {
