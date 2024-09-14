@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/felipeazsantos/breeders/models"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -18,6 +19,7 @@ type application struct {
 	templateMap map[string]*template.Template
 	config      appConfig
 	DB          *sql.DB
+	Models      *models.Models
 }
 
 type appConfig struct {
@@ -40,6 +42,7 @@ func main() {
 	}
 
 	app.DB = db
+	app.Models = models.New(db)
 
 	srv := &http.Server{
 		Addr:              port,
