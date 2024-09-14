@@ -9,3 +9,13 @@
     </div>
 </div>
 {{end}}
+
+{{ define "js" }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/dog-breeds')
+            .then(response => response.json())
+            .then(data => console.log(JSON.stringify(data)));
+    });
+</script>
+{{end}}
