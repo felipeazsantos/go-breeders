@@ -30,7 +30,7 @@ type DogBreed struct {
 	GeographicOrigin string `json:"geographic_origin"`
 }
 
-func GetAll() ([]*DogBreed, error) {
+func (d *DogBreed) GetAll() ([]*DogBreed, error) {
 	return repo.AllDogBreeds()
 }
 
