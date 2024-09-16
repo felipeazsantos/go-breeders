@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/felipeazsantos/breeders/models"
+	"github.com/felipeazsantos/breeders/configuration"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -17,7 +17,7 @@ const port = ":4001"
 type application struct {
 	templateMap map[string]*template.Template
 	config      appConfig
-	Models      *models.Models
+	App         *configuration.Application
 }
 
 type appConfig struct {
@@ -39,7 +39,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	app.Models = models.New(db)
+	app.App = configuration.New(db)
 
 	srv := &http.Server{
 		Addr:              port,

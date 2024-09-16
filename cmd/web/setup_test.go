@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/felipeazsantos/breeders/models"
+	"github.com/felipeazsantos/breeders/configuration"
 )
 
 var testApp application
@@ -12,7 +12,7 @@ var testApp application
 func TestMain(m *testing.M) {
 	// call flag.Parse() here if TestMain uses flags
 	testApp = application{
-		Models: models.New(nil),
+		App: configuration.New(nil),
 	}
 
 	os.Exit(m.Run())
