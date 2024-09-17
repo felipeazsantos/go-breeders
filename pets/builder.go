@@ -2,19 +2,23 @@ package pets
 
 import "errors"
 
+// PetInterface defines the methods that we want our builder to have. These
+// are used to set the fields in the Pet type, and to build the final product.
+// Everything except the Build() function returns the type *Pet because we are
+// going to implement the fluent interface
 type PetInterface interface {
 	SetSpecies(s string) *Pet
 	SetBreed(b string) *Pet
 	SetMinWeight(m int) *Pet
 	SetMaxWeight(m int) *Pet
-	SetAverageWeight(a int) *Pet
 	SetWeight(w int) *Pet
 	SetDescription(d string) *Pet
 	SetLifeSpan(l int) *Pet
 	SetGeographicOrigin(g string) *Pet
 	SetColor(c string) *Pet
 	SetAge(a int) *Pet
-	SetAgeEstimated(ae int) *Pet
+	SetAgeEstimated(ae bool) *Pet
+	Build() (*Pet, error)
 }
 
 func (p *Pet) SetSpecies(s string) *Pet {
@@ -34,11 +38,6 @@ func (p *Pet) SetMinWeight(m int) *Pet {
 
 func (p *Pet) SetMaxWeight(m int) *Pet {
 	p.MaxWeight = m
-	return p
-}
-
-func (p *Pet) SetAverageWeight(a int) *Pet {
-	p.AverageWeight = a
 	return p
 }
 
@@ -72,7 +71,7 @@ func (p *Pet) SetAge(a int) *Pet {
 	return p
 }
 
-func (p *Pet) SetAgeEstimated(ae int) *Pet {
+func (p *Pet) SetAgeEstimated(ae bool) *Pet {
 	p.AgeEstimated = ae
 	return p
 }
