@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/felipeazsantos/breeders/configuration"
 	"github.com/felipeazsantos/breeders/models"
-	"github.com/pkg/errors"
 )
 
 // AnimalInterface is the interface for the types we will return from our abstract factory
@@ -48,11 +48,11 @@ func (df *DogAbstractFactory) newPet() AnimalInterface {
 	}
 }
 
-func (df *DogAbstractFactory) newPetWithBreed(breed string) AnimalInterface {
-	// app := configuration.GetInstance()
-	// breed, _ := app.Models.DogBreed.GetBreedByName(breed)
+func (df *DogAbstractFactory) newPetWithBreed(b string) AnimalInterface {
+	app := configuration.GetInstance()
+	breed, _ := app.Models.DogBreed.GetBreedByName(b)
 	return &DogFromFactory{
-		// Pet: &models.Dog{Breed: breed},
+		Pet: &models.Dog{Breed: *breed},
 	}
 }
 
