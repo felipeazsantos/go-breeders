@@ -1,9 +1,11 @@
 package pets
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/felipeazsantos/breeders/models"
+	"github.com/pkg/errors"
 )
 
 // AnimalInterface is the interface for the types we will return from our abstract factory
@@ -35,6 +37,7 @@ func (cff *CatFromFactory) Show() string {
 
 type PetFactoryInterface interface {
 	newPet() AnimalInterface
+	newPetWithBreed(breed string) AnimalInterface
 }
 
 type DogAbstractFactory struct{}
@@ -45,11 +48,27 @@ func (df *DogAbstractFactory) newPet() AnimalInterface {
 	}
 }
 
+func (df *DogAbstractFactory) newPetWithBreed(breed string) AnimalInterface {
+	// app := configuration.GetInstance()
+	// breed, _ := app.Models.DogBreed.GetBreedByName(breed)
+	return &DogFromFactory{
+		// Pet: &models.Dog{Breed: breed},
+	}
+}
+
 type CatAbstractFactory struct{}
 
 func (cf *CatAbstractFactory) newPet() AnimalInterface {
 	return &CatFromFactory{
 		Pet: &models.Cat{},
+	}
+}
+
+func (cf *CatAbstractFactory) newPetWithBreed(breed string) AnimalInterface {
+	// app := configuration.GetInstance()
+	// breed, _ := app.Models.CatBreed.GetBreedByName(breed)
+	return &CatFromFactory{
+		// Pet: &models.Cat{Breed: breed},
 	}
 }
 
@@ -65,5 +84,20 @@ func NewPetFromAbstractFactory(species string) (AnimalInterface, error) {
 		return cat, nil
 	default:
 		return nil, fmt.Errorf("invalid species: %s", species)
+	}
+}
+
+func NewPetWithBreedFromAbstractFactory(species, breed string) (AnimalInterface, error) {
+	switch species {
+	case "dog":
+		// return a dog with breed embedded
+		var dogFactory DogAbstractFactory
+		dog := dogFactory.newPetWithBreed(breed)
+		return dog, nil
+	case "cat":
+		// return a cat with breed embedded
+		return &CatFromFactory{}, nil
+	default:
+		return nil, errors.New("invalid species supplied")
 	}
 }
