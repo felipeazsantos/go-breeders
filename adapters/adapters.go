@@ -52,6 +52,27 @@ func (jb *JSONBackend) GetAllCatBreeds() ([]*models.CatBreed, error) {
 	return breeds, nil
 }
 
+func (jb *JSONBackend) GetCatBreedByName(b string) (*models.CatBreed, error) {
+	resp, err := http.Get("http://localhost:8081/api/cat-breeds/" + b + "/json")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var breed models.CatBreed
+	err = json.Unmarshal(body, &breed)
+	if err != nil {
+		return nil, err
+	}
+
+	return &breed, nil
+}
+
 type XMLBackend struct{}
 
 func (xb *XMLBackend) GetAllCatBreeds() ([]*models.CatBreed, error) {
