@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/felipeazsantos/breeders/pets"
 	"github.com/go-chi/chi/v5"
@@ -117,4 +118,9 @@ func (app *application) GetAllCatBreeds(w http.ResponseWriter, r *http.Request) 
 func (app *application) AnimalFromAbstractFactory(w http.ResponseWriter, r *http.Request) {
 	// var t toolbox.Tools
 
+	species := chi.URLParam(r, "species")
+	b := chi.URLParam(r, "breed")
+	breed, _ := url.QueryUnescape(b)
+
+	fmt.Println("species: ", species, "breed: ", breed)
 }
