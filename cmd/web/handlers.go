@@ -116,11 +116,16 @@ func (app *application) GetAllCatBreeds(w http.ResponseWriter, r *http.Request) 
 }
 
 func (app *application) AnimalFromAbstractFactory(w http.ResponseWriter, r *http.Request) {
-	// var t toolbox.Tools
+	var t toolbox.Tools
 
 	species := chi.URLParam(r, "species")
 	b := chi.URLParam(r, "breed")
 	breed, _ := url.QueryUnescape(b)
 
-	fmt.Println("species: ", species, "breed: ", breed)
+	pet, err := pets.NewPetWithBreedFromAbstractFactory(species, breed)
+	if err != nil {
+		_ = t.ErrorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+	_ = t.WriteJSON(w, http.StatusOK, pet)
 }
