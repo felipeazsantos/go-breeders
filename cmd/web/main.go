@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/felipeazsantos/breeders/adapters"
 	"github.com/felipeazsantos/breeders/configuration"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -18,7 +19,6 @@ type application struct {
 	templateMap map[string]*template.Template
 	config      appConfig
 	App         *configuration.Application
-	catService  *RemoteService
 }
 
 type appConfig struct {
@@ -40,14 +40,13 @@ func main() {
 		log.Panic(err)
 	}
 
-	// jsonBackend := &JSONBackend{}
-	// jsonAdapter := &RemoteService{Remote: jsonBackend}
+	// jsonBackend := &adapters.JSONBackend{}
+	// jsonAdapter := &adapters.RemoteService{Remote: jsonBackend}
 
-	xmlBackend := &XMLBackend{}
-	xmlAdapter := &RemoteService{Remote: xmlBackend}
+	xmlBackend := &adapters.XMLBackend{}
+	xmlAdapter := &adapters.RemoteService{Remote: xmlBackend}
 
-	app.catService = xmlAdapter
-	app.App = configuration.New(db)
+	app.App = configuration.New(db, xmlAdapter)
 
 	srv := &http.Server{
 		Addr:              port,

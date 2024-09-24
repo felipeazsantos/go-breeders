@@ -126,3 +126,25 @@ func (xb *XMLBackend) GetCatBreedByName(b string) (*models.CatBreed, error) {
 
 	return &breed, nil
 }
+
+type TestBackend struct{}
+
+func (tb *TestBackend) GetAllCatBreeds() ([]*models.CatBreed, error) {
+	breeds := []*models.CatBreed{
+		{
+			ID:      1,
+			Breed:   "Tomcat",
+			Details: "Some details",
+		},
+	}
+	return breeds, nil
+}
+
+func (tb *TestBackend) GetCatBreedByName(b string) (*models.CatBreed, error) {
+	breed := &models.CatBreed{
+		ID:      1,
+		Breed:   "Tomcat",
+		Details: "Some details",
+	}
+	return breed, nil
+}
