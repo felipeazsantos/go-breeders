@@ -3,6 +3,7 @@ package pets
 import (
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/felipeazsantos/breeders/configuration"
 	"github.com/felipeazsantos/breeders/models"
@@ -64,11 +65,15 @@ func (cf *CatAbstractFactory) newPet() AnimalInterface {
 	}
 }
 
-func (cf *CatAbstractFactory) newPetWithBreed(breed string) AnimalInterface {
-	// app := configuration.GetInstance()
-	// breed, _ := app.Models.CatBreed.GetBreedByName(breed)
+func (cf *CatAbstractFactory) newPetWithBreed(b string) AnimalInterface {
+	app := configuration.GetInstance()
+	breed, err := app.CatService.Remote.GetCatBreedByName(b)
+	if err != nil {
+		log.Println("Error getting cat breed by name", err)
+		return nil
+	}
 	return &CatFromFactory{
-		// Pet: &models.Cat{Breed: breed},
+		Pet: &models.Cat{Breed: *breed},
 	}
 }
 
@@ -96,7 +101,9 @@ func NewPetWithBreedFromAbstractFactory(species, breed string) (AnimalInterface,
 		return dog, nil
 	case "cat":
 		// return a cat with breed embedded
-		return &CatFromFactory{}, nil
+		var catFactory CatAbstractFactory
+		cat := catFactory.newPetWithBreed(breed)
+		return cat, nil
 	default:
 		return nil, errors.New("invalid species supplied")
 	}
