@@ -13,6 +13,7 @@ import (
 // any type which implements this interface must have
 type CatBreedsInterface interface {
 	GetAllCatBreeds() ([]*models.CatBreed, error)
+	GetCatBreedByName(b string) (*models.CatBreed, error)
 }
 
 // RemoteService is the Adaptor type. It embeds a DataInterface interface
@@ -25,6 +26,10 @@ type RemoteService struct {
 // call any adaptor which implements the DataInterface type
 func (rs *RemoteService) GetAllCatBreeds() ([]*models.CatBreed, error) {
 	return rs.Remote.GetAllCatBreeds()
+}
+
+func (rs *RemoteService) GetCatBreedByName(b string) (*models.CatBreed, error) {
+	return rs.Remote.GetCatBreedByName(b)
 }
 
 // JSONBackend is the JSON adaptee, which needs to satisfy the CatBreedsInterface by
@@ -99,4 +104,25 @@ func (xb *XMLBackend) GetAllCatBreeds() ([]*models.CatBreed, error) {
 	}
 
 	return breeds.Breeds, nil
+}
+
+func (xb *XMLBackend) GetCatBreedByName(b string) (*models.CatBreed, error) {
+	resp, err := http.Get("http://localhost:8081/api/cat-breeds/" + b + "/xml")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var breed models.CatBreed
+	err = xml.Unmarshal(body, &breed)
+	if err != nil {
+		return nil, err
+	}
+
+	return &breed, nil
 }
